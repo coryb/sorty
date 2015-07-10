@@ -18,6 +18,7 @@
 package sorty
 
 import (
+	"fmt"
 	"reflect"
 	"sort"
 )
@@ -82,6 +83,12 @@ func (s *sorter) Less(i, j int) bool {
 	arr := reflect.ValueOf(s.data)
 	a := arr.Index(i)
 	b := arr.Index(j)
+	for _, x := range []interface{}{a,b} {
+		if a.Kind() != reflect.Map {
+			panic(fmt.Sprintf("Expected a map, but got a %T for %v", x, x))
+		}
+	}
+
 	for i := 0; i < len(s.order); i += 1 {
 		keyComp := s.order[i]
 		af := a.MapIndex(reflect.ValueOf(keyComp.Name)).Interface()
