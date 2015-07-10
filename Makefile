@@ -1,4 +1,7 @@
 export GOPATH=$(shell pwd)
+test:
+	go test -v
+
 fmt:
 	gofmt -s -w *.go
 

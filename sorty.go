@@ -18,25 +18,14 @@
 package sorty
 
 import (
-	// "fmt"
-	// "os"
 	"reflect"
 	"sort"
-	// "strconv"
-	// "strings"
 )
 
 type sorter struct {
 	data  interface{}
 	order KeyComps
 }
-
-type KeyComp struct {
-	Name string
-	Comp func(interface{}, interface{}) CompareResult
-}
-
-type KeyComps []KeyComp
 
 func NewSorter() *sorter {
 	return &sorter{}
@@ -57,12 +46,18 @@ func (s *sorter) ByKeys(order []string) *sorter {
 	return s.ByKeyComps(keyComps)
 }
 
+type KeyComp struct {
+	Name string
+	Comp func(interface{}, interface{}) CompareResult
+}
+
+type KeyComps []KeyComp
+
 func (s *sorter) ByKeyComps(keyComps KeyComps) *sorter {
 	s.order = keyComps
 	return s
 }
 
-// Sort: Data must be a slice of maps
 func (s *sorter) Sort(data interface{}) {
 	s.data = data
 	sort.Sort(s)
