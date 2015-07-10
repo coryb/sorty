@@ -84,7 +84,7 @@ func (s *sorter) Less(i, j int) bool {
 	a := arr.Index(i)
 	b := arr.Index(j)
 	for _, x := range []reflect.Value{a,b} {
-		if a.Kind() != reflect.Map {
+		if x.Kind() != reflect.Map {
 			iface := x.Interface()
 			panic(fmt.Sprintf("Expected a map, but got a %T for %v", iface, iface))
 		}
