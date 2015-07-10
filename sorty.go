@@ -83,9 +83,10 @@ func (s *sorter) Less(i, j int) bool {
 	arr := reflect.ValueOf(s.data)
 	a := arr.Index(i)
 	b := arr.Index(j)
-	for _, x := range []interface{}{a,b} {
+	for _, x := range []reflect.Value{a,b} {
 		if a.Kind() != reflect.Map {
-			panic(fmt.Sprintf("Expected a map, but got a %T for %v", x, x))
+			iface := x.Interface()
+			panic(fmt.Sprintf("Expected a map, but got a %T for %v", iface, iface))
 		}
 	}
 
