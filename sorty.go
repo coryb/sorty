@@ -33,15 +33,15 @@ func NewSorter() *sorter {
 }
 
 func (s *sorter) ByKeys(order []string) *sorter {
-	keyComps := make(KeyComps,0)
+	keyComps := make(KeyComps, 0)
 	for _, key := range order {
 		switch key[0] {
 		case '-':
-			keyComps = append(keyComps, KeyComp{key[1:],Descending})
+			keyComps = append(keyComps, KeyComp{key[1:], Descending})
 		case '+':
-			keyComps = append(keyComps, KeyComp{key[1:],Ascending})
+			keyComps = append(keyComps, KeyComp{key[1:], Ascending})
 		default:
-			keyComps = append(keyComps, KeyComp{key,Ascending})
+			keyComps = append(keyComps, KeyComp{key, Ascending})
 		}
 	}
 	return s.ByKeyComps(keyComps)
@@ -73,21 +73,23 @@ func (s *sorter) Swap(i, j int) {
 		i, j = j, i
 	}
 	arr := reflect.ValueOf(s.data)
-	copy := reflect.MakeSlice(arr.Type(), 2, 2)
-	reflect.Copy(copy, arr.Slice(i, j+1))
-	arr.Index(i).Set(copy.Index(1))
-	arr.Index(j).Set(copy.Index(0))
+
+	tmp := arr.Index(i).Interface()
+	arr.Index(i).Set(arr.Index(j))
+	arr.Index(j).Set(reflect.ValueOf(tmp))
 }
 
 func (s *sorter) Less(i, j int) bool {
 	arr := reflect.ValueOf(s.data)
-	a := arr.Index(i)
-	b := arr.Index(j)
-	for _, x := range []reflect.Value{a,b} {
-		if x.Kind() != reflect.Map {
-			iface := x.Interface()
-			panic(fmt.Sprintf("Expected a map, but got a %T for %v", iface, iface))
-		}
+	a := reflect.ValueOf(arr.Index(i).Interface())
+	b := reflect.ValueOf(arr.Index(j).Interface())
+	if a.Kind() != reflect.Map {
+		iface := a.Interface()
+		panic(fmt.Sprintf("[A] Kind: %s, Expected a map, but got a %T for %v", a.Kind(), iface, iface))
+	}
+	if b.Kind() != reflect.Map {
+		iface := b.Interface()
+		panic(fmt.Sprintf("[B] Kind: %s, Expected a map, but got a %T for %v", b.Kind(), iface, iface))
 	}
 
 	for i := 0; i < len(s.order); i += 1 {
@@ -114,7 +116,7 @@ const (
 )
 
 func Ascending(a, b interface{}) CompareResult {
-	switch Descending(a,b) {
+	switch Descending(a, b) {
 	case LESSER:
 		return GREATER
 	case GREATER:

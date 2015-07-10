@@ -35,8 +35,8 @@ func ExampleByKeys() {
 
 	s.Sort(data)
 
-	foos := make([]string,0)
-	bars := make([]string,0)
+	foos := make([]string, 0)
+	bars := make([]string, 0)
 	for _, d := range data {
 		foos = append(foos, d["foo"])
 		bars = append(bars, d["bar"])
@@ -80,8 +80,8 @@ func ExampleByKeyComps() {
 
 	s.Sort(data)
 
-	foos := make([]string,0)
-	bars := make([]string,0)
+	foos := make([]string, 0)
+	bars := make([]string, 0)
 	for _, d := range data {
 		foos = append(foos, d["foo"])
 		bars = append(bars, d["bar"])
