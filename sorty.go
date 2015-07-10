@@ -87,7 +87,7 @@ func (s *sorter) Less(i, j int) bool {
 		af := a.MapIndex(reflect.ValueOf(keyComp.Name)).Interface()
 		bf := b.MapIndex(reflect.ValueOf(keyComp.Name)).Interface()
 
-		switch keyComp.Comp(af.(string), bf.(string)) {
+		switch keyComp.Comp(af, bf) {
 		case LESSER:
 			return true
 		case GREATER:
