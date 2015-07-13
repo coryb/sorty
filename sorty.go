@@ -51,7 +51,6 @@ func (s *sorter) ByKeys(order []string) *sorter {
 	return s.ByKeyComps(keyComps)
 }
 
-
 // KeyComp struct to provide custom compaitor functions
 type KeyComp struct {
 	Name string
@@ -71,7 +70,6 @@ func (s *sorter) Sort(data interface{}) {
 	s.data = data
 	sort.Sort(s)
 }
-
 
 // Len is required to implement sort.Interface
 func (s *sorter) Len() int {
@@ -149,6 +147,8 @@ func Descending(a, b interface{}) CompareResult {
 		return lg(a.(int) > reflect.ValueOf(b).Convert(reflect.TypeOf(a)).Interface().(int))
 	case int8:
 		return lg(a.(int8) > reflect.ValueOf(b).Convert(reflect.TypeOf(a)).Interface().(int8))
+	case int16:
+		return lg(a.(int16) > reflect.ValueOf(b).Convert(reflect.TypeOf(a)).Interface().(int16))
 	case int32:
 		return lg(a.(int32) > reflect.ValueOf(b).Convert(reflect.TypeOf(a)).Interface().(int32))
 	case int64:
@@ -157,6 +157,8 @@ func Descending(a, b interface{}) CompareResult {
 		return lg(a.(uint) > reflect.ValueOf(b).Convert(reflect.TypeOf(a)).Interface().(uint))
 	case uint8:
 		return lg(a.(uint8) > reflect.ValueOf(b).Convert(reflect.TypeOf(a)).Interface().(uint8))
+	case uint16:
+		return lg(a.(uint16) > reflect.ValueOf(b).Convert(reflect.TypeOf(a)).Interface().(uint16))
 	case uint32:
 		return lg(a.(uint32) > reflect.ValueOf(b).Convert(reflect.TypeOf(a)).Interface().(uint32))
 	case uint64:
@@ -165,9 +167,9 @@ func Descending(a, b interface{}) CompareResult {
 		return lg(a.(float32) > reflect.ValueOf(b).Convert(reflect.TypeOf(a)).Interface().(float32))
 	case float64:
 		return lg(a.(float64) > reflect.ValueOf(b).Convert(reflect.TypeOf(a)).Interface().(float64))
+	default:
+		panic(fmt.Sprintf("dont know how to compare: %T", a))
 	}
-
-	return GREATER
 }
 
 func lg(b bool) CompareResult {
