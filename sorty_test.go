@@ -85,21 +85,22 @@ func TestTypes(t *testing.T) {
 		})
 	}
 
-	NewSorter().ByKeys([]string{
-		"string",
-		"-int",
-		"int8",
-		"-int16",
-		"int32",
-		"-int64",
-		"uint",
-		"-uint8",
-		"uint16",
-		"-uint32",
-		"uint64",
-		"-float32",
-		"float64",
-	}).Sort(stuff)
+	// sort stuff over and over with varying types
+	// this is just to verify that we get no errors
+	// when sorting by various builtin types
+	NewSorter().ByKeys([]string{"string"}).Sort(stuff)
+	NewSorter().ByKeys([]string{"-int"}).Sort(stuff)
+	NewSorter().ByKeys([]string{"int8"}).Sort(stuff)
+	NewSorter().ByKeys([]string{"-int16"}).Sort(stuff)
+	NewSorter().ByKeys([]string{"int32"}).Sort(stuff)
+	NewSorter().ByKeys([]string{"-int64"}).Sort(stuff)
+	NewSorter().ByKeys([]string{"uint"}).Sort(stuff)
+	NewSorter().ByKeys([]string{"-uint8"}).Sort(stuff)
+	NewSorter().ByKeys([]string{"uint16"}).Sort(stuff)
+	NewSorter().ByKeys([]string{"-uint32"}).Sort(stuff)
+	NewSorter().ByKeys([]string{"uint64"}).Sort(stuff)
+	NewSorter().ByKeys([]string{"-float32"}).Sort(stuff)
+	NewSorter().ByKeys([]string{"float64"}).Sort(stuff)
 
 	if len(stuff) != 1000 {
 		t.Fail()
