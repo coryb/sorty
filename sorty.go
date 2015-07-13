@@ -28,10 +28,14 @@ type sorter struct {
 	order KeyComps
 }
 
+// NewSorter create a new sorter struct which Sort() can be called on.
 func NewSorter() *sorter {
 	return &sorter{}
 }
 
+// ByKeys is used to provide a list of string to indicate which keys to sort by and in which
+// order.  If the key name starts with "-" it will be sorted in Descending order otherwise
+// it will be sorted in Ascending order.
 func (s *sorter) ByKeys(order []string) *sorter {
 	keyComps := make(KeyComps, 0)
 	for _, key := range order {
@@ -47,6 +51,8 @@ func (s *sorter) ByKeys(order []string) *sorter {
 	return s.ByKeyComps(keyComps)
 }
 
+
+// KeyComp struct to provide custom compaitor functions
 type KeyComp struct {
 	Name string
 	Comp func(interface{}, interface{}) CompareResult
@@ -54,20 +60,25 @@ type KeyComp struct {
 
 type KeyComps []KeyComp
 
+// ByKeyComps is used to provide a list of KeyComp to sort by key with an explicit comparitor.
 func (s *sorter) ByKeyComps(keyComps KeyComps) *sorter {
 	s.order = keyComps
 	return s
 }
 
+// Sort will sort the data provided.  The data should be a slice of something.
 func (s *sorter) Sort(data interface{}) {
 	s.data = data
 	sort.Sort(s)
 }
 
+
+// Len is required to implement sort.Interface
 func (s *sorter) Len() int {
 	return reflect.ValueOf(s.data).Len()
 }
 
+// Swap is required to implement sort.Interface
 func (s *sorter) Swap(i, j int) {
 	if i > j {
 		i, j = j, i
@@ -79,6 +90,7 @@ func (s *sorter) Swap(i, j int) {
 	arr.Index(j).Set(reflect.ValueOf(tmp))
 }
 
+// Less is required to implement sort.Interface
 func (s *sorter) Less(i, j int) bool {
 	arr := reflect.ValueOf(s.data)
 	a := reflect.ValueOf(arr.Index(i).Interface())

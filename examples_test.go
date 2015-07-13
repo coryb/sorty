@@ -2,51 +2,57 @@ package sorty
 
 import (
 	"fmt"
+	"encoding/json"
 )
 
-func ExampleByKeys() {
+func toJson(d interface{}) []byte {
+	js, _ := json.Marshal(d)
+	return js
+}
+
+
+func ExampleByKeys_Strings() {
 	s := NewSorter().ByKeys([]string{
 		"+foo",
 		"-bar",
 	})
 
 	data := []map[string]string{
-		{
-			"foo": "abc",
-			"bar": "xyz",
-		},
-		{
-			"foo": "xyz",
-			"bar": "abc",
-		},
-		{
-			"foo": "def",
-			"bar": "jhi",
-		},
-		{
-			"foo": "def",
-			"bar": "def",
-		},
-		{
-			"foo": "mno",
-			"bar": "jkl",
-		},
+		{"foo": "abc", "bar": "xyz"},
+		{"foo": "xyz", "bar": "abc"},
+		{"foo": "def", "bar": "jhi"},
+		{"foo": "def", "bar": "def"},
+		{"foo": "mno", "bar": "jkl"},
 	}
 
 	s.Sort(data)
 
-	foos := make([]string, 0)
-	bars := make([]string, 0)
-	for _, d := range data {
-		foos = append(foos, d["foo"])
-		bars = append(bars, d["bar"])
-	}
-	fmt.Printf("foos: %v\n", foos)
-	fmt.Printf("bars: %v\n", bars)
+	fmt.Printf("%s\n", toJson(data))
 
 	// Output:
-	// foos: [abc def def mno xyz]
-	// bars: [xyz jhi def jkl abc]
+	// [{"bar":"xyz","foo":"abc"},{"bar":"jhi","foo":"def"},{"bar":"def","foo":"def"},{"bar":"jkl","foo":"mno"},{"bar":"abc","foo":"xyz"}]
+}
+
+func ExampleByKeys_interface() {
+	s := NewSorter().ByKeys([]string{
+		"+foo",
+		"-bar",
+	})
+
+	data := []map[string]interface{}{
+		{"foo": "abc", "bar": 890},
+		{"foo": "xyz", "bar": 123},
+		{"foo": "def", "bar": 456},
+		{"foo": "mno", "bar": 789},
+		{"foo": "def", "bar": 789},
+	}
+
+	s.Sort(data)
+
+	fmt.Printf("%s\n", toJson(data))
+
+	// Output:
+	// [{"bar":890,"foo":"abc"},{"bar":789,"foo":"def"},{"bar":456,"foo":"def"},{"bar":789,"foo":"mno"},{"bar":123,"foo":"xyz"}]
 }
 
 func ExampleByKeyComps() {
@@ -56,40 +62,17 @@ func ExampleByKeyComps() {
 	})
 
 	data := []map[string]string{
-		{
-			"foo": "abc",
-			"bar": "xyz",
-		},
-		{
-			"foo": "xyz",
-			"bar": "abc",
-		},
-		{
-			"foo": "def",
-			"bar": "jhi",
-		},
-		{
-			"foo": "def",
-			"bar": "def",
-		},
-		{
-			"foo": "mno",
-			"bar": "jkl",
-		},
+		{"foo": "abc", "bar": "xyz"},
+		{"foo": "xyz", "bar": "abc"},
+		{"foo": "def", "bar": "jhi"},
+		{"foo": "def", "bar": "def"},
+		{"foo": "mno", "bar": "jkl"},
 	}
 
 	s.Sort(data)
 
-	foos := make([]string, 0)
-	bars := make([]string, 0)
-	for _, d := range data {
-		foos = append(foos, d["foo"])
-		bars = append(bars, d["bar"])
-	}
-	fmt.Printf("foos: %v\n", foos)
-	fmt.Printf("bars: %v\n", bars)
+	fmt.Printf("%s\n", toJson(data))
 
 	// Output:
-	// foos: [abc def def mno xyz]
-	// bars: [xyz jhi def jkl abc]
+	// [{"bar":"xyz","foo":"abc"},{"bar":"jhi","foo":"def"},{"bar":"def","foo":"def"},{"bar":"jkl","foo":"mno"},{"bar":"abc","foo":"xyz"}]
 }
