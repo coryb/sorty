@@ -1,15 +1,14 @@
 package sorty
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 )
 
 func toJson(d interface{}) []byte {
 	js, _ := json.Marshal(d)
 	return js
 }
-
 
 func ExampleByKeys_Strings() {
 	s := NewSorter().ByKeys([]string{
@@ -35,7 +34,7 @@ func ExampleByKeys_Strings() {
 
 func ExampleByKeys_interface() {
 	s := NewSorter().ByKeys([]string{
-		"+foo",
+		"foo",
 		"-bar",
 	})
 
